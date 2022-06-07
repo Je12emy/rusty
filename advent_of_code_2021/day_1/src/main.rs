@@ -1,5 +1,6 @@
 fn main() {
-    let measurements: [i32; 2000] = [
+    // TODO read the input directly
+    let measurements = vec![
         180, 152, 159, 171, 178, 169, 212, 213, 214, 222, 228, 215, 228, 240, 248, 220, 224, 201,
         212, 218, 217, 225, 218, 255, 256, 260, 261, 262, 263, 254, 255, 261, 270, 248, 252, 258,
         259, 243, 242, 240, 233, 241, 250, 256, 258, 256, 258, 261, 263, 274, 262, 248, 265, 266,
@@ -133,30 +134,22 @@ fn main() {
         7471, 7479, 7480, 7485, 7482, 7483, 7484, 7488, 7497,
     ];
 
-    let mut index: usize = 0;
-    let mut increases: i32 = 0;
-    let mut last_measurement: i32;
-    let mut next_measurement: i32;
-
-    while index < measurements.len() {
-        if index == 0 {
-            last_measurement = measurements[0];
-            index += 1;
-            continue;
-        }
-
-        if (index + 1) == measurements.len() {
-            break;
-        }
-
-        last_measurement = measurements[index];
-        next_measurement = measurements[index + 1];
-
-        if next_measurement > last_measurement {
-            increases += 1;
-        }
-
-        index += 1;
-    }
+    let increases = calculate_increases(0, measurements, 0);
     println!("{}", increases) // Answer is 1529
+}
+
+// Here's a dumb mistake I made because I haven't done recursion in a while
+// and I'm dumb...
+// sum += calculate_increases(i + 1, m, sum); <-- returns 1529 first
+// return sum; <-- But I still returned it, this means 1529 would get added over and over
+fn calculate_increases(i: usize, m: Vec<i32>, mut sum: i32) -> i32 {
+    if (i + 1) == m.len() {
+        return sum;
+    }
+
+    if m[i] < m[i + 1] {
+        sum += 1;
+    }
+    
+    return calculate_increases(i + 1, m, sum);
 }
